@@ -1,0 +1,241 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Countdown Setting</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js"></script>
+  <script src="FileSave.js"></script>
+  <meta name="viewport" content="width = device-width">
+  <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <script>
+    const url = "https://api.studimax.ch/countdown/index.php";
+    const week = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+
+    function createInput(name, type, id = null) {
+      this.label = $("<label></label>");
+      this.label.attr("name", name);
+      this.input = $("<input>");
+      this.input.attr("placeholder", name);
+      this.input.attr("type", type);
+      if (id != null)
+        this.input.attr("id", id);
+      this.label.append(this.input);
+    }
+
+    function addConfigStreamer(data = null) {
+      let cn = $("<div class='config-streamer'></div>");
+      let cnInfo = $("<div class='config-streamer-info'></div>");
+      let cnPlanning = $("<div class='config-planning'></div>");
+      let cnBreak = addConfigBreak(data);
+      let $pseudo = new createInput("Pseudo", "text", "pseudo");
+      let $color = new createInput("Color", "color", "color");
+      let $image = new createInput("Image", "text", "imageUrl");
+      let $button = $("<button class='delete'></button>");
+      $button.click(() => {
+        cn.slideUp(200, function() {
+          $(this).remove()
+        });
+      });
+      cnInfo.append($pseudo.label, $image.label, $color.label, $button);
+      cn.append(cnInfo, cnPlanning, cnBreak);
+      $(".config-streamers").append(cn);
+      for (let day of week) {
+        cnPlanning.append(addConfigDay(day));
+      }
+      if (!data) return;
+      $pseudo.input.val(data.name);
+      $color.input.val(data.color);
+      $image.input.val(data.image);
+      cnPlanning.empty();
+      for (let dayId in data.planning) {
+        cnPlanning.append(addConfigDay(dayId, data.planning[dayId]));
+      }
+    }
+
+    function addConfigDay(day, data = null) {
+      let $day = $("<div class='config-days'></div>");
+      $day.attr('id', day);
+      let $button = $("<button>add</button>");
+      let $buttonContent = $("<div class='config-button'></div>");
+      $buttonContent.append($button);
+      $day.append("<label><input type='checkbox' checked>" + day + "</label><div class='config-times'></div>", $buttonContent);
+      $button.click(() => {
+        addConfigTime($day.find(".config-times"));
+      });
+      if (data && data.active != null)
+        $day.find("input[type=checkbox]").prop("checked", data.active);
+      if (data && data.time) {
+        for (let time of data.time)
+          addConfigTime($day.find(".config-times"), time.hours.toString().replace(/^(\d)$/, '0$1') + ":" + time.minutes.toString().replace(/^(\d)$/, '0$1'));
+      }
+      return $day;
+    }
+
+    function addConfigBreak(data = null) {
+      console.log(data);
+      let $break = $("<div class='config-break'></div>");
+      let $checkbox = new createInput("active", "checkbox", "checkbox");
+      let $breakConfig = $("<div class='config-break-date'></div>");
+      let $start = new createInput("start", "date", "start");
+      let $end = new createInput("end", "date", "end");
+      let $message = new createInput("message", "text", "message");
+      $breakConfig.append($start.label,$end.label,$message.label);
+      $break.append("<h3>Break</h3>",$checkbox.label,$breakConfig);
+      if (data && data.break != null){
+        $checkbox.input.prop("checked", data.break.active);
+        $start.input.val(data.break.start);
+        $end.input.val(data.break.end);
+        $message.input.val(data.break.message);
+      }
+      return $break;
+    }
+
+    function addConfigTime(cn, value = null) {
+      let $time = $("<div class='config-time'></div>");
+      let $button = $("<button class='delete'></button>");
+      let $input = $("<input type='time'>").val(value);
+      $time.append($input, $button);
+      $button.click(() => {
+        $time.slideUp(200, function() {
+          $(this).remove()
+        });
+      });
+      cn.append($time);
+    }
+
+    function load(data) {
+      $(".config-streamers").empty();
+      for (let streamer of data.streamer)
+        addConfigStreamer(streamer);
+    }
+
+    function save() {
+      let data = {};
+      data.streamer = [];
+      $(".config-streamers .config-streamer").each(function() {
+        let streamer = {};
+        streamer.name = $(this).find("#pseudo").val();
+        streamer.color = $(this).find("#color").val();
+        streamer.image = $(this).find("#imageUrl").val();
+        streamer.planning = {};
+        $(this).find(".config-planning .config-days").each(function() {
+          let day = $(this).attr("id");
+          streamer.planning[day] = {
+            active: true,
+            time: []
+          };
+          streamer.planning[day].active = $(this).find("input[type=checkbox]").prop("checked");
+          $(this).find(".config-time").each(function() {
+            let value = $(this).find("input[type=time]").val();
+            if (value != "" && value != null) {
+              let time = value.split(":");
+              streamer.planning[day].time.push({
+                hours: parseInt(time[0]),
+                minutes: parseInt(time[1])
+              });
+            }
+          });
+        });
+
+        streamer.break = {};
+        streamer.break.active = $(this).find(".config-break").find("input[type=checkbox]").prop("checked");
+        $(this).find(".config-break .config-break-date label").each(function() {
+          let type = $(this).attr("name");
+          let value = $(this).find("input").val();
+          if (type != "" && value != "")
+            streamer.break[type] = value;
+        });
+
+        data.streamer.push(streamer);
+      });
+      return data;
+    }
+
+    function saveData(elmt) {
+      let data = JSON.stringify(save());
+      $.post(url, {
+        data: data
+      }, function(data) {
+        if (elmt) $(elmt).notify("Saved", "success");
+        load(data);
+      }, "json");
+    }
+
+    function loadData(elmt) {
+      $.getJSON(url, (data) => {
+        if (elmt) $(elmt).notify("Success", "success");
+        load(data);
+      });
+    }
+
+    function download(data, filename) {
+      var blob = new Blob([data], {
+        type: "application/json;charset=utf-8"
+      });
+      saveAs(blob, filename + ".json");
+    }
+
+    function saveAsFile(elmt) {
+      let data = JSON.stringify(save());
+      $.post(url, {
+        data: data
+      }, function(data) {
+        if (elmt) $(elmt).notify("Saved", "success");
+        download(JSON.stringify(data, null, 2), "saveCountdown");
+      }, "json");
+    }
+
+    function handleFileSelect(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      var files = evt.target.files;
+      if (evt.dataTransfer)
+        files = evt.dataTransfer.files;
+      for (let f of files) {
+        if (f.type != "application/json") continue;
+        var reader = new FileReader();
+        reader.onload = (function(theFile) {
+          return function(e) {
+            let data = JSON.parse(e.target.result);
+            load(data);
+          };
+        })(f);
+        reader.readAsBinaryString(f);
+      }
+    }
+
+    function handleDragOver(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      evt.dataTransfer.dropEffect = 'copy';
+    }
+
+    document.addEventListener('dragover', handleDragOver, false);
+    document.addEventListener('drop', handleFileSelect, false);
+    $(function() {
+      loadData();
+      document.getElementById('files').addEventListener('change', handleFileSelect, false);
+    });
+  </script>
+  <div class="content">
+    <h1>Countdown Settings</h1>
+    <h2>Streamer</h2>
+    <div class="config-streamers"></div>
+    <button onclick="addConfigStreamer()">add streamer</button>
+    <div class="config-text">
+    </div>
+    <div class="config-button">
+      <button type="button" onclick="saveData(this)">save</button>
+      <button type="button" onclick="loadData(this)">reset</button>
+      <button type="button" onclick="saveAsFile(this)">export</button>
+      <label class="button">import<input type="file" id="files"></label>
+    </div>
+    <h5>codded by © Maxime Scharwath</h5>
+  </div>
+</body>
+
+</html>

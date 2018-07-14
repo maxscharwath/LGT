@@ -1,0 +1,209 @@
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #32c3a2;
+  color: #50596c;
+  text-rendering: optimizeLegibility;
+  font-family: Roboto, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  overflow-x: hidden;
+  margin: 0;
+  display: grid;
+}
+
+input[type=color],
+input[type=time],
+input[type=date],
+input[type=text] {
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+input[type=color] {
+  max-width: 50px;
+}
+
+.content {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #faf9fa;
+  padding: 5px;
+}
+
+.config-streamer label,
+.config-break label,
+.config-days label {
+  display: inline-block;
+  padding: 5px 0;
+  font-weight: bold;
+  position: relative;
+  text-transform: capitalize;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+input {
+  border: 1px solid #d2d2d2;
+  padding: 3px 5px;
+  font-size: 12px;
+  font-family: Roboto, sans-serif !important;
+  vertical-align: middle;
+}
+
+.button,
+button {
+  border: none !important;
+  border-radius: 2px;
+  color: #fff;
+  background-color: #32c3a2;
+  font-size: 12px !important;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 6px;
+  cursor: pointer;
+  font-family: Arial;
+  display: inline-block;
+  margin: 2px 0px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+label.button input {
+  display: none;
+}
+
+.button:active,
+.button:focus,
+.button:hover,
+button:active,
+button:focus,
+button:hover {
+  background: #2daf91;
+  border-color: #289a80;
+  color: #fff;
+}
+
+button.delete {
+  border: 1px solid #ffdbdb !important;
+  border-radius: 2px;
+  color: #ff4141;
+  background-color: #fff6f7;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  margin: auto 4px;
+  width: auto;
+}
+
+button.delete::after {
+  font-size: 14px;
+  line-height: 1.5;
+  content: "✖";
+  font-weight: bolder;
+}
+
+.config-planning {
+  margin-bottom: 10px;
+  display: flex;
+  width: 100%;
+}
+
+.config-days {
+  display: inline-block;
+  width: 100%;
+  vertical-align: top;
+  transition: 200ms;
+}
+
+.config-days:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.config-time {
+  margin-bottom: 4px;
+  white-space: nowrap;
+  display: flex;
+}
+
+.config-streamer-info,
+.config-break-date {
+  display: flex;
+}
+
+.config-break label {
+  margin-bottom: 4px;
+  white-space: nowrap;
+  vertical-align: middle;
+  margin: 0 5px;
+}
+
+.config-streamer-info label,
+.config-break-date label {
+  display: grid;
+  width: 100%;
+  margin: 5px;
+}
+
+.config-streamer label::before,
+.config-break label::before {
+  content: attr(name);
+}
+
+.config-break-date label input {
+  width: 100%;
+}
+
+.config-time input {
+  width: 100%;
+  text-align: center;
+}
+
+.config-time * {
+  vertical-align: middle;
+}
+
+.config-planning,
+.config-button {
+  padding: 5px;
+}
+
+.config-streamer {
+  margin-bottom: 15px;
+  border-bottom: 2px solid #32c3a2;
+  background-color: #eaeaea;
+}
+
+@media only screen and (max-width: 850px) {
+  .config-planning {
+    display: block;
+  }
+  .config-break-date {
+    display: block;
+  }
+  .config-break-date label {
+    width: auto;
+  }
+  .button,
+  button {
+    width: 100%;
+  }
+}

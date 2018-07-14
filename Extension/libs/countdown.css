@@ -1,0 +1,199 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Montserrat:300,400,500,700);
+*, :after, :before {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale
+}
+
+.countdown {
+  position: relative;
+  margin: 0;
+  padding: 10px;
+  font-family: Montserrat, Roboto, sans-serif;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 12px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.countdown_timer {
+  margin: 10px 0px;
+  padding: 0;
+  font-family: Montserrat, Roboto, sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-shadow: white 0px 0px 40px;
+  color: white;
+}
+
+.countdown_timer-disabled {
+  font-size: 22px
+}
+
+.countdown_timer-none {
+  font-size: 20px
+}
+
+.countdown_timer-break-message {
+  margin-top: 10px;
+  font-size: 12px
+}
+
+.countdown_timer-days, .countdown_timer-hours, .countdown_timer-mins, .countdown_timer-secs {
+  position: relative;
+  font-size: 35px;
+}
+
+.countdown_timer-days:before, .countdown_timer-hours:before, .countdown_timer-mins:before, .countdown_timer-secs:before {
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  font-size: 8px;
+  letter-spacing: 0;
+  color: #788c92;
+  transform: translateX(-50%)
+}
+
+.countdown_timer span:before {
+  content: attr(name);
+}
+
+.countdown_dates {
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none
+}
+
+.countdown_dates li {
+  margin: 0 3px
+}
+
+li .countdown_dates-day {
+  margin-top: 0;
+  margin-bottom: 7px;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 500
+}
+
+li .countdown_dates-day::before {
+  content: "";
+  display: block;
+  margin: 0 auto 7px;
+  border-radius: 50%;
+  width: 7px;
+  height: 7px;
+  background-color: #94aab1
+}
+
+li.today .countdown_dates-day::before {
+  background-color: #00bbff;
+  box-shadow: #00bbff 0px 0px 10px;
+}
+
+.countdown_dates-time {
+  margin-bottom: 3px;
+  font-size: 10px;
+  font-weight: 400;
+  color: #788c92;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.countdown_dates-time li {
+  margin-bottom: 5px;
+}
+
+.countdown_time-info {
+  font-size: 10px;
+  color: #5b6369
+}
+
+.countdown_live {
+  margin: 30px 0 25px;
+  text-transform: uppercase
+}
+
+.countdown_live-dot {
+  display: inline-block;
+  margin: 6.25px 0;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: red
+}
+
+.countdown_streamers li {
+  height: 30px;
+  width: 30px;
+  border: 2px solid white;
+  display: inline-block;
+  border-radius: 50%;
+  margin: 10px 5px;
+  cursor: pointer;
+  box-sizing: content-box;
+  vertical-align: middle;
+  transition: 100ms ease-in;
+  z-index: 1;
+  position: relative;
+}
+.countdown_streamers li div {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.countdown_streamers li div img {
+  width: 100%;
+  height: 100%;
+  -webkit-filter: drop-shadow(-2.5px 2.5px 0px rgba(0, 0, 0, 0.2));
+}
+
+.countdown_streamers li.active {
+  box-shadow: white 0px 0px 40px;
+  transform: scale(1.4);
+  z-index: 1;
+}
+
+.countdown_streamers li.hover::after, .countdown_streamers li::after {
+  content: attr(data-name);
+  top: 50%;
+  background: white;
+  color: black;
+  padding: 3px;
+  text-align: center;
+  margin: 0 -100%;
+  border-radius: 2px;
+  position: relative;
+  font-size: 0px;
+  transition: 200ms ease-in-out;
+  opacity: 0;
+}
+
+.countdown_streamers li.hover::after, .countdown_streamers li:hover::after {
+  font-size: 8px;
+  top: -20px;
+  opacity: 0.95;
+  transition: 250ms ease-in-out;
+  transition-delay: 300ms;
+}
+
+.countdown_streamers li.hover, .countdown_streamers li:hover {
+  transform: scale(2);
+  z-index: 2;
+}
+
+.countdown_streamers li:active {
+  transform: scale(1.8);
+  z-index: 2;
+}

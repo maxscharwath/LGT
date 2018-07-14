@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="Maxime Scharwath">
+  <link href="libs/font-awesome.css" rel="stylesheet">
+  <link href="libs/style.css" rel="stylesheet">
+  <link href="libs/countdown.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="top" id="content">
+    <div id="preview"></div>
+    <img src="libs/img/popup-logo-off.png" alt="">
+  </div>
+
+  <div class="bottom">
+    <ul class="data-stream">
+      <li id="data-title"><span></span></li>
+      <ul class="data-stream oneline">
+        <li id="data-game"><i class="fa fa-gamepad"></i><span></span></li>
+        <li id="data-viewer"><span></span><i class="fa fa-user"></i></li>
+      </ul>
+      <li id="data-timeago"><i class="fa fa-clock-o"></i><time class="timeago"></time></li>
+    </ul>
+    <button class="btn-site" id="btn-planning">afficher planning <i class="fa fa-chevron-down"></i></button>
+    <div class="countdown"></div>
+    <a target="_blank" href="https://www.twitch.tv/lesgrossestanches" class="btn-site">aller sur Twitch <i class="fa fa-chevron-right"></i></a>
+  </div>
+  <script type="text/javascript" src="libs/jquery-3.3.1.min.js"></script>
+  <script type="text/javascript" src="libs/jquery.timeago.js"></script>
+  <script type="text/javascript" src="libs/plugin.js"></script>
+  <script type="text/javascript" src="libs/countdown.js"></script>
+</body>
+
+</html>
