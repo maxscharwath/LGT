@@ -187,6 +187,7 @@ a.btn-site {
   transition: all ease 0.25s;
 }
 
+a.btn-site:focus,
 a.btn-site:hover {
   background: #b21717;
   color: #FFF;

@@ -1,4 +1,3 @@
-let countdown;
 $(document).ready(function() {
   function getThumbnail(url, width, height) {
     url = url.replace("{width}", width);
@@ -46,7 +45,7 @@ $(document).ready(function() {
     }
 	}
   checkStreamPopup();
-  countdown = new Countdown("https://api.studimax.ch/countdown/index.php");
+  $(".countdown").countdown("https://api.studimax.ch/countdown/index.php");
   $("#btn-planning").click(function() {
     $(".countdown").toggle();
     checkBtnPlanning();

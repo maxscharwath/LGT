@@ -17,6 +17,38 @@
   color: #fff;
   font-size: 12px;
   background-color: rgba(0, 0, 0, 0.5);
+  min-height: 118px;
+  transition: 1000ms ease-in;
+}
+
+.countdown .loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  background-image: url(img/loading.gif);
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 50px;
+  cursor: wait;
+}
+
+.countdown_streamers .loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-image: url(img/loading.gif);
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 20px;
+  cursor: wait;
 }
 
 .countdown_timer {
@@ -146,7 +178,9 @@ li.today .countdown_dates-day::before {
   transition: 100ms ease-in;
   z-index: 1;
   position: relative;
+  outline: none;
 }
+
 .countdown_streamers li div {
   width: 100%;
   height: 100%;

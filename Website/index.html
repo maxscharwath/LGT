@@ -32,7 +32,7 @@
       z-index: 10;
     }
 
-    p {
+    .content p {
       font-family: Montserrat, Roboto, sans-serif;
       font-size: 15px;
       font-weight: 500;
@@ -65,14 +65,17 @@
 
 <body>
   <img class="logo" src="libs/img/popup-logo-on.png" alt="">
-  <div>
+  <div class="content">
     <p>Les grosses tanches est un collectif de streamers pas spécialement doués, qui ont pour but une seule chose, la domination du monde. Followez-nous :)</p>
   </div>
+  <div class="countdown"></div>
+  <div class="countdown"></div>
+  <div class="countdown"></div>
   <div class="countdown"></div>
   <script type="text/javascript" src="libs/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="libs/countdown.js"></script>
   <script>
-    let countdown = new Countdown("https://api.studimax.ch/countdown/index.php");
+    $(".countdown").countdown("https://api.studimax.ch/countdown/index.php");
   </script>
 </body>
 
