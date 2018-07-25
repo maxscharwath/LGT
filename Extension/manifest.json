@@ -18,5 +18,5 @@
    "manifest_version": 2,
    "name": "Les Grosses Tanches",
    "permissions": [ "https://api.studimax.ch/", "https://api.twitch.tv/", "https://api.dailymotion.com/", "notifications", "storage" ],
-   "version": "1.9"
+   "version": "1.9.1"
 }

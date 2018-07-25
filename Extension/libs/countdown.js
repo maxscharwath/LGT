@@ -26,6 +26,23 @@
       this.elmt.append("<div class='countdown_timer'></div>")
         .append("<ul class='countdown_dates'></ul>")
         .append("<ul class='countdown_streamers'></ul>");
+
+      $(document).keydown((e) => {
+        var code = e.keyCode || e.which;
+        if (code === 9) {
+          e.preventDefault();
+          if (e.shiftKey) {
+            this.streamerSelected--;
+          } else {
+            this.streamerSelected++;
+          }
+          if (this.streamerSelected >= this.data.streamer.length)
+            this.streamerSelected = 0;
+          if (this.streamerSelected < 0)
+            this.streamerSelected = this.data.streamer.length - 1;
+          this.setPage();
+        }
+      });
     }
 
     this.loadData = function(url = this.url) {
@@ -212,7 +229,7 @@
           });
         });
 
-        $streamer.on("focus", (e) => {
+        $streamer.on("click", (e) => {
           if (this.streamerSelected != streamerId)
             this.streamerSelected = streamerId;
           else

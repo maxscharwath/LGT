@@ -19,6 +19,6 @@
    "name": "Les Grosses Tanches",
    "permissions": [ "https://api.studimax.ch/", "https://api.twitch.tv/", "https://api.dailymotion.com/", "notifications", "storage" ],
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "1.9",
-   "version_name": "1.9"
+   "version": "1.9.1",
+   "version_name": "1.9.1"
 }

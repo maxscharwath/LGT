@@ -26,6 +26,41 @@
       this.elmt.append("<div class='countdown_timer'></div>")
         .append("<ul class='countdown_dates'></ul>")
         .append("<ul class='countdown_streamers'></ul>");
+
+      $(window).keydown((e) => {
+        var code = e.keyCode || e.which;
+        if (code === 9) {
+          e.preventDefault();
+          if (e.shiftKey) {
+            this.streamerSelected--;
+          } else {
+            this.streamerSelected++;
+          }
+          if (this.streamerSelected >= this.data.streamer.length)
+            this.streamerSelected = 0;
+          if (this.streamerSelected < 0)
+            this.streamerSelected = this.data.streamer.length - 1;
+          this.setPage();
+        }
+      }).mousemove(function(event) {
+        let p1 = {
+          x: event.clientX,
+          y: event.clientY
+        }
+
+        $('.streamer img').each(function() {
+          let p2 = {
+            x: $(this)[0].getBoundingClientRect().left + $(this)[0].getBoundingClientRect().width/2,
+            y: $(this)[0].getBoundingClientRect().top + $(this)[0].getBoundingClientRect().height/2
+          }
+          let angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+          let dist = Math.min(5, Math.max(2.5, Math.hypot(p2.y - p1.y, p2.x - p1.x)/20));
+          let x = dist * Math.cos(angle);
+          let y = dist * Math.sin(angle);
+          $(this).css("-webkit-filter", "drop-shadow(" + x + "px " + y + "px 0px rgba(0, 0, 0, 0.2))")
+          //-webkit-filter: drop-shadow(-2.5px 2.5px 0px rgba(0, 0, 0, 0.2));
+        });
+      });
     }
 
     this.loadData = function(url = this.url) {
@@ -38,7 +73,6 @@
         })
         .done((data) => {
           data = JSON.parse(data);
-          console.log(data);
           this.setData(data);
         })
         .always(() => {
@@ -212,7 +246,7 @@
           });
         });
 
-        $streamer.on("focus", (e) => {
+        $streamer.on("click", (e) => {
           if (this.streamerSelected != streamerId)
             this.streamerSelected = streamerId;
           else
