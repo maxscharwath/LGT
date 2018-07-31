@@ -1,9 +1,12 @@
 (function($) {
   $.fn.countdown = function(url) {
+    let countdown = [];
     this.each(function() {
-      let countdown = new Countdown(url, $(this));
-    })
-    return this;
+      countdown.push(new Countdown(url, $(this)));
+    });
+    if (countdown.length == 1)
+      return countdown[0];
+    return countdown;
   };
 
   $.fn.queueAddClass = function(className) {
@@ -27,7 +30,7 @@
         .append("<ul class='countdown_dates'></ul>")
         .append("<ul class='countdown_streamers'></ul>");
 
-      $(document).keydown((e) => {
+      $(window).keydown((e) => {
         var code = e.keyCode || e.which;
         if (code === 9) {
           e.preventDefault();
@@ -42,21 +45,69 @@
             this.streamerSelected = this.data.streamer.length - 1;
           this.setPage();
         }
+      }).mousemove(function(event) {
+        let p1 = {
+          x: event.clientX,
+          y: event.clientY
+        }
+
+        $('.streamer img').each(function() {
+          let p2 = {
+            x: $(this)[0].getBoundingClientRect().left + $(this)[0].getBoundingClientRect().width / 2,
+            y: $(this)[0].getBoundingClientRect().top + $(this)[0].getBoundingClientRect().height / 2
+          }
+          let angle = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+          let dist = Math.min(5, Math.max(2.5, Math.hypot(p2.y - p1.y, p2.x - p1.x) / 20));
+          let x = dist * Math.cos(angle);
+          let y = dist * Math.sin(angle);
+          $(this).css("-webkit-filter", "drop-shadow(" + x + "px " + y + "px 0px rgba(0, 0, 0, 0.2))");
+        });
       });
     }
 
     this.loadData = function(url = this.url) {
       let $loadContent = $("<div class='loading'></div>");
+
+      function formatErrorMessage(jqXHR, exception) {
+        console.log(jqXHR.status, exception);
+        if (jqXHR.status === 0) {
+          return (["Non connecté", "Veuillez vérifier votre connexion réseau."]);
+        } else if (jqXHR.status == 404) {
+          return (["Erreur 404", "La page demandée n'a pas été trouvée."]);
+        } else if (jqXHR.status == 500) {
+          return (["Erreur 500", "Erreur interne du serveur."]);
+        } else if (exception === 'parsererror') {
+          return (["Erreur", "L'analyse JSON demandée a échoué."]);
+        } else if (exception === 'timeout') {
+          return (["Erreur", "Erreur de délai d'attente"]);
+        } else if (exception === 'abort') {
+          return (["Erreur", "La requête Ajax a été annulée."]);
+        } else {
+          return (["Erreur non détectée.", jqXHR.responseText]);
+        }
+      }
+
       $.ajax({
           url: url,
+          type: "GET",
+          crossDomain: true,
+          async: true,
           beforeSend: () => {
             this.elmt.append($loadContent);
           }
         })
         .done((data) => {
           data = JSON.parse(data);
-          console.log(data);
           this.setData(data);
+          this.error = null;
+        })
+        .fail((xhr, err) => {
+          var responseTitle = $(xhr.responseText).filter('title').get(0);
+          this.error = {};
+          let error = formatErrorMessage(xhr, err);
+          this.error.message = error[0];
+          this.error.comment = error[1];
+          setTimeout(() => this.loadData(), 5000);
         })
         .always(() => {
           this.restart();
@@ -162,8 +213,15 @@
 
     this.refresh = function() {
       if (!this.data) {
+        let errorMsg = "no data";
+        let errorComment = "";
+        if (this.error) {
+          errorMsg = this.error.message;
+          errorComment = this.error.comment;
+        }
         this.elmt.find(".countdown_timer").empty().append(
-          $("<div class='countdown_timer-none'></div>").text("no data")
+          $("<div class='countdown_timer-none'></div>").text(errorMsg),
+          $("<div class='countdown_timer-break-message'></div>").text(errorComment)
         );
         return false;
       }

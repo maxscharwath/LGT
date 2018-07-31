@@ -127,6 +127,13 @@ li .countdown_dates-day::before {
   background-color: #94aab1
 }
 
+li.today {
+  padding: 5px 7px;
+  border-radius: 5px;
+  margin-top: -5px;
+  background-color: rgba(41, 52, 59, 0.4);
+}
+
 li.today .countdown_dates-day::before {
   background-color: #00bbff;
   box-shadow: #00bbff 0px 0px 10px;
